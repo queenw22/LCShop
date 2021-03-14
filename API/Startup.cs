@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +25,8 @@ namespace API
         {
 
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             services.AddDbContext<ShopContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen(c =>
@@ -45,6 +48,9 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            //allow app to have access to files(images) in wwwroot folder
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
