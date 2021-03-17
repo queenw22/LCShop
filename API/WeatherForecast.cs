@@ -1,7 +1,10 @@
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
+
     public class WeatherForecast
     {
         public DateTime Date { get; set; }

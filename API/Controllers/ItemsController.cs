@@ -9,12 +9,13 @@ using Core.Specifications;
 using System.Linq;
 using AutoMapper;
 using API.Dtos;
+using API.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ItemsController : ControllerBase
+   
+    public class ItemsController : BaseApiController
     {
         private readonly IGenericRepository<ItemBrand> _itemBrandRepo;
         private readonly IGenericRepository<ItemType> _itemTypeRepo;
@@ -43,12 +44,20 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
 
         public async Task<ActionResult<ItemToReturnDto>> GetItemByIdAsync(int id)
         {
             var spec = new ItemsTypesAndBrandsSpec(id);
 
             var item = await _itemsRepo.GetEntityWithSpec(spec);
+
+            if (item == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
 
             //map out product descrition data that displays to user 
             return _mapper.Map<Item, ItemToReturnDto>(item);
