@@ -30,6 +30,13 @@ namespace API
              //add extended custom service class 
             services.AddAppServices();
             services.AddSwaggerDocumentation();
+            services.AddCors(opt => 
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
             
 
             
@@ -53,6 +60,8 @@ namespace API
             
             //allow app to have access to files(images) in wwwroot folder
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
