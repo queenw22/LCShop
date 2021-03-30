@@ -41,7 +41,7 @@ namespace API.Controllers
             var countSpec = new ItemFiltersForCountSpec(itemParams);
 
             //change to countSpec if app crashes 
-            var totalItems = await _itemsRepo.CountAsync(spec);
+            var totalItems = await _itemsRepo.CountAsync(countSpec);
             var items = await _itemsRepo.ListAsync(spec);
             var data = _mapper.Map<IReadOnlyList<Item>, IReadOnlyList<ItemToReturnDto>>(items);
 
